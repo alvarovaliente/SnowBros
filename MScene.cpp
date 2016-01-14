@@ -254,7 +254,7 @@ void MScene::createLevel()
 	App->FCollision->AddCollider({ (TILE_WIDTH * 6) + 7 , -(TILE_HEIGHT * 6) + 7 + TILE_HEIGHT / 2 - 3, 2, TILE_HEIGHT }, COLLIDER_PLATFORM_BORDER_RIGHT, this);
 
 	//block1
-	App->FCollision->AddCollider({ (TILE_WIDTH * 2) + 4, -(TILE_HEIGHT * 6) + 8 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
+	App->FCollision->AddCollider({ (TILE_WIDTH * 2) , -(TILE_HEIGHT * 6) + 8 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
 
 	//platform3
 	App->FCollision->AddCollider({ (TILE_WIDTH * 4) + 3, -(TILE_HEIGHT * 8) + 3 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 6) + TILE_WIDTH / 2, 2 }, COLLIDER_PLATFORM, this);
@@ -265,7 +265,7 @@ void MScene::createLevel()
 	App->FCollision->AddCollider({ (TILE_WIDTH * 10) + 8, -(TILE_HEIGHT * 8) + 4 + TILE_HEIGHT / 2 - 3, 2, TILE_HEIGHT }, COLLIDER_PLATFORM_BORDER_LEFT, this);
 
 	//block2
-	App->FCollision->AddCollider({ (TILE_WIDTH * 13) - 4, -(TILE_HEIGHT * 8) + 6 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
+	App->FCollision->AddCollider({ (TILE_WIDTH * 13), -(TILE_HEIGHT * 8) + 6 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
 
 	//platform4
 	App->FCollision->AddCollider({ (TILE_WIDTH * 6) + 7, -(TILE_HEIGHT * 10) + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 7), 2 }, COLLIDER_PLATFORM, this);
@@ -276,7 +276,7 @@ void MScene::createLevel()
 	App->FCollision->AddCollider({ (TILE_WIDTH * 6) + 7, -(TILE_HEIGHT * 10) + TILE_HEIGHT / 2 - 3, 2, TILE_HEIGHT }, COLLIDER_PLATFORM_BORDER_RIGHT, this);
 
 	//block3
-	App->FCollision->AddCollider({ (TILE_WIDTH * 2) + 5, -(TILE_HEIGHT * 10) + 13 - TILE_HEIGHT / 2 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
+	App->FCollision->AddCollider({ (TILE_WIDTH * 2) , -(TILE_HEIGHT * 10) + 13 - TILE_HEIGHT / 2 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
 
 	//platform5
 	App->FCollision->AddCollider({ (TILE_WIDTH * 3) + 3, -(TILE_HEIGHT *12) -3 + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 7) + TILE_WIDTH / 2, 2 }, COLLIDER_PLATFORM, this);
@@ -287,7 +287,7 @@ void MScene::createLevel()
 	App->FCollision->AddCollider({ (TILE_WIDTH * 10) + 10, -(TILE_HEIGHT * 12) - 3 + TILE_HEIGHT / 2 - 3, 2, TILE_HEIGHT }, COLLIDER_PLATFORM_BORDER_LEFT, this);
 
 	//block4
-	App->FCollision->AddCollider({ (TILE_WIDTH * 13) - 3, -(TILE_HEIGHT * 12) + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
+	App->FCollision->AddCollider({ (TILE_WIDTH * 13) , -(TILE_HEIGHT * 12) + TILE_HEIGHT / 2 - 3, (TILE_WIDTH * 2), TILE_HEIGHT * 1 }, COLLIDER_WALL, this);
 
 
 

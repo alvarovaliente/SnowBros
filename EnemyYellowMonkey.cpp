@@ -463,11 +463,16 @@ void EnemyYellowMonkey::OnCollision(Collider* c1, Collider* c2)
 
 	case COLLIDER_PLATFORM:
 	{
-		if (colliderFoot->active == true)
+		if ( status != ENEMY_DYING)
 		{
-			if (c1->rect.y <= c2->rect.y)
+
+
+			if (colliderFoot->active == true)
 			{
-				position.y -= 2;
+				if (c1->rect.y <= c2->rect.y)
+				{
+					position.y -= 2;
+				}
 			}
 		}
 	}
@@ -476,13 +481,18 @@ void EnemyYellowMonkey::OnCollision(Collider* c1, Collider* c2)
 	case COLLIDER_WALL:
 	{
 
-		walking = (walking * -1);
+		if (status == ENEMY_WALKING_LEFT || status == ENEMY_WALKING_RIGHT)
+		{
+			walking = (walking * -1);
+		}
 
 		if (status == ENEMY_ROLLING)
 		{
 			rebound++;
 
 			App->Faudio->PlayFx(reboundFx);
+
+			walking = (walking * -1);
 		}
 
 		if (status == ENEMY_DYING)
