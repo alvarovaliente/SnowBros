@@ -197,8 +197,7 @@ update_status Player::PreUpdate()
 		{
 			timeAnimationFlying.stop();
 			status = PLAYER_IDLE_LEFT;
-			this->position.y = 200;
-			this->position.y = 200;
+			
 		}
 
 		//reborn
