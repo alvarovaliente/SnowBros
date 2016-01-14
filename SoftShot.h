@@ -13,6 +13,7 @@ class SoftShot : public Particle
 
 public:
 
+	//methods
 	SoftShot(infoParticle info);
 	~SoftShot();
 
@@ -21,10 +22,14 @@ public:
 	bool const isDead();
 	void OnCollision(Collider* c1, Collider* c2);
 
+	//animation
 	Animation anim;
 	Animation explosion;
+
+	//graphics
 	SDL_Texture *texture;
 
+	//timers
 	Timer timeToDie;
 	Timer timeGoingUp;
 	Timer timeGoingDown;

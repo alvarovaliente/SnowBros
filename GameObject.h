@@ -54,8 +54,10 @@ class GameObject
 
 public:
 
+	//methods
 	GameObject();
 	virtual ~GameObject();
+
 	virtual bool Start();
 	virtual update_status PreUpdate();
 	virtual update_status Update();
@@ -68,6 +70,7 @@ public:
 	virtual void fly();
 	virtual void OnCollision(Collider* c1, Collider* c2);
 
+	//variables
 	iPoint position;
 	bool dead;
 	GameObject *link = nullptr;

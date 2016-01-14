@@ -22,7 +22,7 @@ MGameOver::~MGameOver()
 
 }
 
-// Load assets
+
 bool MGameOver::Start()
 {
 	gameOverFx = App->Faudio->LoadFx("gameover.ogg");
@@ -34,7 +34,7 @@ bool MGameOver::Start()
 	return true;
 }
 
-// UnLoad assets
+
 bool MGameOver::CleanUp()
 {
 
@@ -43,7 +43,7 @@ bool MGameOver::CleanUp()
 	return true;
 }
 
-// Update: draw background
+
 update_status MGameOver::Update()
 {
 

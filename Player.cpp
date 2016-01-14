@@ -216,8 +216,8 @@ update_status Player::PreUpdate()
 			}
 			else if (App->scene->nLevel == 2)
 			{
-				position.x = 50;
-				position.y = -100;
+				position.x = SCREEN_WIDTH / 2;
+				position.y = -90;
 			}
 
 			timeAnimationDyingButStillLives.stop();
@@ -712,9 +712,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 			if (c1->rect.y <= c2->rect.y)
 			{
 				position.y -= 2;
-			}
-
-		
+			}	
 	}
 		break;
 

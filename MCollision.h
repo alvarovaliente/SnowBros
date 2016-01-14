@@ -11,6 +11,7 @@ class MCollision : public Module
 {
 public:
 
+	//methods
 	MCollision();
 	~MCollision();
 
@@ -18,11 +19,11 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	bool CleanUp();
-
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback = NULL);
 
 private:
 
+	//variables
 	std::list<Collider*> colliders;
 	std::list<Collider*> colliding;
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];

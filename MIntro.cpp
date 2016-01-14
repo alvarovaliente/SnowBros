@@ -23,7 +23,7 @@ MIntro::~MIntro()
 
 }
 
-// Load assets
+
 bool MIntro::Start()
 {
 	background = App->Ftextures->Load("intro.png");
@@ -37,7 +37,7 @@ bool MIntro::Start()
 	return true;
 }
 
-// UnLoad assets
+
 bool MIntro::CleanUp()
 {
 
@@ -47,7 +47,7 @@ bool MIntro::CleanUp()
 	return true;
 }
 
-// Update: draw background
+
 update_status MIntro::Update()
 {
 	

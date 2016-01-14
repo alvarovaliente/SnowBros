@@ -44,6 +44,8 @@ update_status HardShot::Update()
 	{
 		collider->SetPos(position.x, position.y);
 
+		//this gonna draw a parabole
+
 		if (timeGoingUp.isStarted() && timeGoingUp.getTicks() <= 245)
 		{
 			position.x += speed.x;

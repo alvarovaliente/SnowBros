@@ -25,6 +25,7 @@ class MGameObject : public Module
 {
 public:
 
+
 	MGameObject();
 	~MGameObject();
 
@@ -33,13 +34,9 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	bool CleanUp();
-
 	GameObject* Owner(Collider const *collider);
-
 	GameObject* returnPlayer();
-
 	void createGameObject(infoGameObject info, GAMEOBJECT_TYPE type, COLLIDER_TYPE collider_type);
-
 	void OnCollision(Collider* c1, Collider* c2);
 
 private:

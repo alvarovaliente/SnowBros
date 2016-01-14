@@ -33,7 +33,7 @@ MCollision::MCollision() : Module()
 	matrix[COLLIDER_PLAYER][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER_SOFT_SHOT] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER_HARD_SHOT] = false;
-	matrix[COLLIDER_PLAYER][COLLIDER_SNOWBALL] = true;
+	
 	matrix[COLLIDER_PLAYER][COLLIDER_PLATFORM_BORDER_LEFT_SPEC] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLATFORM_BORDER_RIGHT_SPEC] = true;
 
@@ -52,7 +52,7 @@ MCollision::MCollision() : Module()
 	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_PLAYER_SOFT_SHOT] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_PLAYER_HARD_SHOT] = true;
-	matrix[COLLIDER_ENEMY][COLLIDER_SNOWBALL] = true;
+	
 	matrix[COLLIDER_ENEMY][COLLIDER_PLATFORM_BORDER_LEFT] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_PLATFORM_BORDER_RIGHT] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_PLATFORM_BORDER_LEFT_SPEC] = true;
@@ -185,10 +185,6 @@ update_status MCollision::PostUpdate()
 
 			case COLLIDER_PLAYER_HARD_SHOT:
 				App->renderer->DrawQuad(col->rect, 255, 255, 0, alpha);
-				break;
-
-			case COLLIDER_SNOWBALL:
-				App->renderer->DrawQuad(col->rect, 73, 73, 73, alpha);
 				break;
 		
 			case COLLIDER_POTION_RED:

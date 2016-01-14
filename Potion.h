@@ -24,18 +24,18 @@ public:
 	bool const isDead();
 	bool CleanUp();
 
-
+	//variables
+	int lifeTime;
 
 	//Textures
 	SDL_Texture *graphicsPotion = nullptr;
-
 
 	//Animations
 	Animation redPotion;
 	Animation bluePotion;
 	Animation yellowPotion;
+
 	//Timers
-	int lifeTime;
 	Timer start;
 
 

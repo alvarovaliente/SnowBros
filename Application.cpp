@@ -22,8 +22,8 @@ Application::Application()
 
 	modules.push_back(Faudio = new MAudio());
 
-	modules.push_back(intro = new MIntro(false));
-	modules.push_back(scene = new MScene(true));
+	modules.push_back(intro = new MIntro(true));
+	modules.push_back(scene = new MScene(false));
 	modules.push_back(gameover = new MGameOver(false));
 	modules.push_back(FGameObject = new MGameObject());
 	modules.push_back(FParticle = new MParticle());

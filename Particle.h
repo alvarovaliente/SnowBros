@@ -34,6 +34,7 @@ class Particle
 
 public:
 
+	//variables
 	fPoint position;
 	fPoint speed;
 	bool visible;
@@ -43,9 +44,10 @@ public:
 	Particle *link = nullptr;
 	Collider *collider = nullptr;
 
-
+	//methods
 	Particle(infoParticle info);
 	virtual ~Particle();
+
 	virtual bool Start();
 	virtual update_status Update();
 	virtual const bool isDead();

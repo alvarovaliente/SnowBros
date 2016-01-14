@@ -50,7 +50,7 @@ MScene::~MScene()
 
 }
 
-// Load assets
+
 bool MScene::Start()
 {
 	nPlayerLives = 2;
@@ -114,7 +114,7 @@ void MScene::createPlayerAndEnemies(int level)
 
 	case 2:
 
-		player->position.x = 120;
+		player->position.x = SCREEN_WIDTH / 2;
 		player->position.y = -90;
 
 		inf.position = { 80, -280 };
@@ -295,7 +295,7 @@ void MScene::createLevel()
 	
 }
 
-// UnLoad assets
+
 bool MScene::CleanUp()
 {
 
@@ -306,7 +306,7 @@ bool MScene::CleanUp()
 	return true;
 }
 
-// Update: draw background
+
 update_status MScene::Update()
 {
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)

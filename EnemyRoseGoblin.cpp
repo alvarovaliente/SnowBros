@@ -17,17 +17,15 @@ using namespace std;
 EnemyRoseGoblin::EnemyRoseGoblin(infoGameObject info)
 {
 	
+	//initialization
 	type = ENEMY_ROSEGOBLIN;
-
 	position = info.position;
-
 	lifetime.start();
-
-
 	walking = 1;
 	flying = 3;
-
 	status = ENEMY_IDLE_LEFT;
+	shotCount = 0;
+	rebound = 0;
 
 	//idle left
 	idleLeft.frames.push_back({ 14, 10, 126, 125 });
@@ -93,13 +91,6 @@ EnemyRoseGoblin::EnemyRoseGoblin(infoGameObject info)
 	snowRolling.frames.push_back({464,5,122,145});
 	snowRolling.speed = 0.2f;
 
-
-	shotCount = 0;
-	rebound = 0;
-
-	
-
-	
 }
 
 EnemyRoseGoblin::~EnemyRoseGoblin()
@@ -126,201 +117,196 @@ update_status EnemyRoseGoblin::PreUpdate()
 	if (startTime.getTicks() >= LEVELFROZENTIME)
 	{
 
-	
-	while (!App->scene->pause)
-	{
-		GameObject *wherePLayerIs = App->FGameObject->returnPlayer();
-
-
-		//is rolling
-		if (status == ENEMY_ROLLING)
+		while (!App->scene->pause)
 		{
-			position.x += walking;
-		}
+			GameObject *wherePLayerIs = App->FGameObject->returnPlayer();
 
 
+			//is rolling
+			if (status == ENEMY_ROLLING)
+			{
+				position.x += walking;
+			}
+			position.y += 2;
+			//state machine
+			if (status != ENEMY_TRAPPED && status != ENEMY_SNOWBALL && status != ENEMY_ROLLING && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT)
+			{
 
-		//state machine
-		position.y += 2;
+				position.x += walking;
+			}
 
-		if (status != ENEMY_TRAPPED && status != ENEMY_SNOWBALL && status != ENEMY_ROLLING && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT)
-		{
-
-			position.x += walking;
-		}
-
-		if (walking > 0 && status != ENEMY_TRAPPED && status != ENEMY_SNOWBALL && status != ENEMY_ROLLING && status != ENEMY_DYING && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT) //positive speed -> right
-		{
-			status = ENEMY_WALKING_RIGHT;
-		}
-		else if (walking < 0 && status != ENEMY_TRAPPED && status != ENEMY_SNOWBALL && status != ENEMY_ROLLING && status != ENEMY_DYING && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT) //negative speed -> left
-		{
-			status = ENEMY_WALKING_LEFT;
-		}
-
-		if (shotCount == 0 && status == ENEMY_TRAPPED)
-		{
-			if (walking > 0)
+			if (walking > 0 && status != ENEMY_TRAPPED && status != ENEMY_SNOWBALL && status != ENEMY_ROLLING && status != ENEMY_DYING && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT) //positive speed -> right
 			{
 				status = ENEMY_WALKING_RIGHT;
 			}
-			else
+			else if (walking < 0 && status != ENEMY_TRAPPED && status != ENEMY_SNOWBALL && status != ENEMY_ROLLING && status != ENEMY_DYING && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT) //negative speed -> left
 			{
 				status = ENEMY_WALKING_LEFT;
 			}
 
-		}
-
-
-		//jumping
-		if (status == ENEMY_JUMPING_LEFT || status == ENEMY_JUMPING_RIGHT)
-		{
-			position.y -= 5;
-
-			if (timeAnimationJumping.getTicks() > ENEMY_JUMPING_TIME)
+			if (shotCount == 0 && status == ENEMY_TRAPPED)
 			{
-				//position.y -= ENEMY_COLLIDER_BODY_HEIGHT + 10;
-
-				status = previousStatus;
-				timeAnimationJumping.stop();
-
-			}
-		}
-
-
-		if (timeAnimationBeingTrapped.isStarted() && timeAnimationBeingTrapped.getTicks() >= ENEMY_TRAPPED_TIME)
-		{
-
-			timeAnimationBeingTrapped.stop();
-
-			if (shotCount > 0)
-			{
-				shotCount--;
-			}
-
-			timeAnimationBeingTrapped.start();
-
-		}
-
-
-		//gonna be rolling
-		if (timerGonnaBeRolling.isStarted() && timerGonnaBeRolling.getTicks() > 100)
-		{
-			this->colliderBody->rolling = true;
-		}
-
-		//dying
-		if (timeAnimationDying.isStarted() && timeAnimationDying.getTicks() >5000)
-		{
-
-			dead = true;
-			colliderBody->to_delete = true;
-			colliderFoot->to_delete = true;
-			App->scene->nEnemiesLeft--;
-		}
-
-		if (timeAnimationDying.isStarted() && timeAnimationDying.getTicks() < 5000)
-		{
-			position.x -= flying;
-			position.y -= flying;
-		}
-
-		if (rebound == 4)
-		{
-			//drop a random potion
-			srand(lifetime.getTicks());
-			int randomDropPotion = rand() % 4 + 1;
-			if (randomDropPotion == 2)
-			{
-				infoGameObject inf;
-				inf.position.x = this->position.x;
-				inf.position.y = this->position.y;
-
-				srand(lifetime.getTicks());
-				int randomPotion = rand() % 3 + 1;
-
-				switch (randomPotion)
+				if (walking > 0)
 				{
-				case 1:
-					App->FGameObject->createGameObject(inf, RED_POTION, COLLIDER_POTION_RED);
-					break;
-
-				case 2:
-					App->FGameObject->createGameObject(inf, BLUE_POTION, COLLIDER_POTION_BLUE);
-					break;
-
-				case 3:
-					App->FGameObject->createGameObject(inf, YELLOW_POTION, COLLIDER_POTION_YELLOW);
-					break;
-				default:
-					break;
+					status = ENEMY_WALKING_RIGHT;
+				}
+				else
+				{
+					status = ENEMY_WALKING_LEFT;
 				}
 
 			}
 
-			GameObject *player = App->FGameObject->returnPlayer();
-			player->stopRolling();
-			dead = true;
-			colliderBody->to_delete = true;
-			colliderFoot->to_delete = true;
-			App->scene->nEnemiesLeft--;
 
+			//jumping
+			if (status == ENEMY_JUMPING_LEFT || status == ENEMY_JUMPING_RIGHT)
+			{
+				position.y -= 5;
+
+				if (timeAnimationJumping.getTicks() > ENEMY_JUMPING_TIME)
+				{
+					//position.y -= ENEMY_COLLIDER_BODY_HEIGHT + 10;
+
+					status = previousStatus;
+					timeAnimationJumping.stop();
+
+				}
+			}
+
+			//trapped in snowball
+			if (timeAnimationBeingTrapped.isStarted() && timeAnimationBeingTrapped.getTicks() >= ENEMY_TRAPPED_TIME)
+			{
+
+				timeAnimationBeingTrapped.stop();
+
+				if (shotCount > 0)
+				{
+					shotCount--;
+				}
+
+				timeAnimationBeingTrapped.start();
+
+			}
+
+
+			//gonna be rolling
+			if (timerGonnaBeRolling.isStarted() && timerGonnaBeRolling.getTicks() > 100)
+			{
+				this->colliderBody->rolling = true;
+			}
+
+			//dying
+			if (timeAnimationDying.isStarted() && timeAnimationDying.getTicks() >5000)
+			{
+
+				dead = true;
+				colliderBody->to_delete = true;
+				colliderFoot->to_delete = true;
+				App->scene->nEnemiesLeft--;
+			}
+
+			if (timeAnimationDying.isStarted() && timeAnimationDying.getTicks() < 5000)
+			{
+				position.x -= flying;
+				position.y -= flying;
+			}
+
+			if (rebound == 4)
+			{
+				//drop a random potion
+				srand(lifetime.getTicks());
+				int randomDropPotion = rand() % 4 + 1;
+				if (randomDropPotion == 2)
+				{
+					infoGameObject inf;
+					inf.position.x = this->position.x;
+					inf.position.y = this->position.y;
+
+					srand(lifetime.getTicks());
+					int randomPotion = rand() % 3 + 1;
+
+					switch (randomPotion)
+					{
+					case 1:
+						App->FGameObject->createGameObject(inf, RED_POTION, COLLIDER_POTION_RED);
+						break;
+
+					case 2:
+						App->FGameObject->createGameObject(inf, BLUE_POTION, COLLIDER_POTION_BLUE);
+						break;
+
+					case 3:
+						App->FGameObject->createGameObject(inf, YELLOW_POTION, COLLIDER_POTION_YELLOW);
+						break;
+					default:
+						break;
+					}
+
+				}
+
+				GameObject *player = App->FGameObject->returnPlayer();
+				player->stopRolling();
+				dead = true;
+				colliderBody->to_delete = true;
+				colliderFoot->to_delete = true;
+				App->scene->nEnemiesLeft--;
+
+			}
+
+			//changing between the four phases being trapped in the snowball
+			if (status != ENEMY_ROLLING && status != ENEMY_DYING)
+			{
+				switch (shotCount)
+				{
+
+				case 0:
+					colliderBody->active = true;
+					colliderBody->launchable = false;
+					break;
+				case 1:
+				{
+					status = ENEMY_TRAPPED;
+					colliderBody->active = false;
+					colliderBody->launchable = false;
+				}
+
+				case 2:
+				{
+					status = ENEMY_TRAPPED;
+					colliderBody->active = false;
+					colliderBody->launchable = false;
+				}
+				break;
+
+				case 3:
+				{
+					status = ENEMY_TRAPPED;
+
+					colliderBody->active = false;
+					colliderBody->launchable = false;
+
+				}
+
+				break;
+
+				case 4:
+				{
+					status = ENEMY_SNOWBALL;
+					colliderBody->active = false;
+					colliderBody->launchable = true;
+				}
+
+				break;
+
+				default:
+					break;
+				}
+			}
+
+			return UPDATE_CONTINUE;
 		}
 
-		if (status != ENEMY_ROLLING && status != ENEMY_DYING)
-		{
-			switch (shotCount)
-			{
-
-			case 0:
-				colliderBody->active = true;
-				colliderBody->launchable = false;
-				break;
-			case 1:
-			{
-				status = ENEMY_TRAPPED;
-				colliderBody->active = false;
-				colliderBody->launchable = false;
-			}
-
-			case 2:
-			{
-				status = ENEMY_TRAPPED;
-				colliderBody->active = false;
-				colliderBody->launchable = false;
-			}
-			break;
-
-			case 3:
-			{
-				status = ENEMY_TRAPPED;
-
-				colliderBody->active = false;
-				colliderBody->launchable = false;
-
-
-			}
-
-			break;
-
-			case 4:
-			{
-				status = ENEMY_SNOWBALL;
-				colliderBody->active = false;
-				colliderBody->launchable = true;
-			}
-
-			break;
-
-			default:
-				break;
-			}
 		}
-
-		return UPDATE_CONTINUE;
-	}
-
-	}
 
 	
 	return UPDATE_CONTINUE;
@@ -331,12 +317,12 @@ update_status EnemyRoseGoblin::Update()
 {
 
 	
-
+		//updating collider pos
 		colliderBody->SetPos(position.x, position.y);
 		colliderFoot->SetPos(position.x, (position.y + ENEMY_COLLIDER_BODY_HEIGHT));
 
 
-
+		//drawing
 		switch (status)
 		{
 		case ENEMY_IDLE_LEFT:
@@ -374,33 +360,22 @@ update_status EnemyRoseGoblin::Update()
 			break;
 		}
 
+		//drawing snowball phases
 		if (status != ENEMY_ROLLING && status != ENEMY_DYING)
 		{
 			switch (shotCount)
 			{
 			case 1:
-			{
 				App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y + 15, &(snowShotOne.GetCurrentFrame()), 1.0f);
-
-			}
 			break;
-			case 2:
-			{
+			case 2:	
 				App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y + 5, &(snowShotTwo.GetCurrentFrame()), 1.0f);
-
-			}
 			break;
 			case 3:
-			{
 				App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y, &(snowShotThree.GetCurrentFrame()), 1.0f);
-
-			}
 			break;
 			case 4:
-			{
 				App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y - 6, &(snowShotFour.GetCurrentFrame()), 1.0f);
-
-			}
 			break;
 
 			default:
@@ -413,11 +388,7 @@ update_status EnemyRoseGoblin::Update()
 	
 }
 
-update_status EnemyRoseGoblin::PostUpdate()
-{
 
-	return UPDATE_CONTINUE;
-}
 
 bool const EnemyRoseGoblin::isDead()
 {
@@ -503,15 +474,11 @@ void EnemyRoseGoblin::OnCollision(Collider* c1, Collider* c2)
 				position.y -= 2;
 			}
 		}
-		
-	
-
 	}
 	break;
 
 	case COLLIDER_WALL:
 	{
-		//borders
 		
 		walking = (walking * -1);
 
@@ -672,8 +639,6 @@ void EnemyRoseGoblin::OnCollision(Collider* c1, Collider* c2)
 
 			if (aux != nullptr)
 			{
-				
-
 				c2->active = false;
 				aux->die();
 
@@ -681,6 +646,7 @@ void EnemyRoseGoblin::OnCollision(Collider* c1, Collider* c2)
 			
 		}
 
+		//when an enemy collides with other enemy, we start a timer in order to not allowing to collide again with other enemy in a time
 		if (!timerNotChangingDir.isStarted() && status != ENEMY_DYING && status != ENEMY_ROLLING && status != ENEMY_SNOWBALL && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT)
 		{
 			walking = (walking * -1);
@@ -700,7 +666,6 @@ void EnemyRoseGoblin::OnCollision(Collider* c1, Collider* c2)
 	case COLLIDER_PLAYER_SOFT_SHOT:
 	{
 		
-
 		if (shotCount < 4)
 		{
 			timeAnimationBeingTrapped.stop();
@@ -714,8 +679,6 @@ void EnemyRoseGoblin::OnCollision(Collider* c1, Collider* c2)
 
 	case COLLIDER_PLAYER_HARD_SHOT:
 	{
-
-
 		if (shotCount < 4)
 		{
 			timeAnimationBeingTrapped.stop();

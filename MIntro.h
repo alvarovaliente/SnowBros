@@ -10,6 +10,7 @@ class Collider;
 class MIntro : public Module
 {
 public:
+
 	MIntro(bool start_enabled = true);
 	~MIntro();
 
@@ -17,10 +18,11 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-
+	//graphics
 	SDL_Texture* background = nullptr;
 	SDL_Texture* start = nullptr;
 
+	//timerds
 	Timer timeStart;
 
 	unsigned int introFx;

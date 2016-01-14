@@ -18,16 +18,13 @@ EnemyYellowMonkey::EnemyYellowMonkey(infoGameObject info)
 {
 
 	type = ENEMY_YELLOWMONKEY;
-
 	position = info.position;
-
 	lifetime.start();
-
-
 	walking = 1;
 	flying = 3;
-
 	status = ENEMY_IDLE_LEFT;
+	shotCount = 0;
+	rebound = 0;
 
 	//idle left
 	idleLeft.frames.push_back({ 45, 27, 140, 130 });
@@ -64,7 +61,6 @@ EnemyYellowMonkey::EnemyYellowMonkey(infoGameObject info)
 	dying.frames.push_back({ 570, 747, 122, 150 });
 	dying.frames.push_back({ 744, 763, 145, 136 });
 	dying.frames.push_back({ 913, 789, 149, 106 });
-
 	dying.loop = true;
 	dying.speed = 0.2f;
 
@@ -93,8 +89,7 @@ EnemyYellowMonkey::EnemyYellowMonkey(infoGameObject info)
 	snowRolling.frames.push_back({ 464, 5, 122, 145 });
 	snowRolling.speed = 0.2f;
 
-	shotCount = 0;
-	rebound = 0;
+	
 
 }
 
@@ -136,9 +131,10 @@ update_status EnemyYellowMonkey::PreUpdate()
 
 
 
-			//state machine
+			
 			position.y += 2;
 
+			//state machine
 			if (status != ENEMY_TRAPPED && status != ENEMY_SNOWBALL && status != ENEMY_ROLLING && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT)
 			{
 
@@ -183,7 +179,7 @@ update_status EnemyYellowMonkey::PreUpdate()
 				}
 			}
 
-
+			//trapped in the snowball
 			if (timeAnimationBeingTrapped.isStarted() && timeAnimationBeingTrapped.getTicks() >= ENEMY_TRAPPED_TIME)
 			{
 
@@ -263,6 +259,7 @@ update_status EnemyYellowMonkey::PreUpdate()
 
 			}
 
+			//changing between diferrent trapped in the snowball phases
 			if (status != ENEMY_ROLLING && status != ENEMY_DYING)
 			{
 				switch (shotCount)
@@ -293,8 +290,6 @@ update_status EnemyYellowMonkey::PreUpdate()
 
 					colliderBody->active = false;
 					colliderBody->launchable = false;
-
-
 				}
 
 				break;
@@ -329,8 +324,7 @@ update_status EnemyYellowMonkey::Update()
 	colliderBody->SetPos(position.x, position.y);
 	colliderFoot->SetPos(position.x, (position.y + ENEMY_COLLIDER_BODY_HEIGHT));
 
-
-
+	//draw
 	switch (status)
 	{
 	case ENEMY_IDLE_LEFT:
@@ -367,33 +361,22 @@ update_status EnemyYellowMonkey::Update()
 		break;
 	}
 
+	//draw different snowball trapped phases
 	if (status != ENEMY_ROLLING && status != ENEMY_DYING)
 	{
 		switch (shotCount)
 		{
 		case 1:
-		{
 			App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y + 15, &(snowShotOne.GetCurrentFrame()), 1.0f);
-
-		}
 		break;
 		case 2:
-		{
 			App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y + 5, &(snowShotTwo.GetCurrentFrame()), 1.0f);
-
-		}
 		break;
-		case 3:
-		{
+		case 3:	
 			App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y, &(snowShotThree.GetCurrentFrame()), 1.0f);
-
-		}
 		break;
 		case 4:
-		{
 			App->renderer->Blit(graphicsEnemyShotSnowball, position.x, position.y - 6, &(snowShotFour.GetCurrentFrame()), 1.0f);
-
-		}
 		break;
 
 		default:
@@ -401,17 +384,9 @@ update_status EnemyYellowMonkey::Update()
 		}
 	}
 
-
-
-
 	return UPDATE_CONTINUE;
 }
 
-update_status EnemyYellowMonkey::PostUpdate()
-{
-
-	return UPDATE_CONTINUE;
-}
 
 bool const EnemyYellowMonkey::isDead()
 {
@@ -495,15 +470,11 @@ void EnemyYellowMonkey::OnCollision(Collider* c1, Collider* c2)
 				position.y -= 2;
 			}
 		}
-
-
-
 	}
 	break;
 
 	case COLLIDER_WALL:
 	{
-		//borders
 
 		walking = (walking * -1);
 
@@ -519,7 +490,6 @@ void EnemyYellowMonkey::OnCollision(Collider* c1, Collider* c2)
 			flying = (flying * -1);
 
 		}
-
 
 	}
 	break;
@@ -665,15 +635,13 @@ void EnemyYellowMonkey::OnCollision(Collider* c1, Collider* c2)
 
 			if (aux != nullptr)
 			{
-
-
 				c2->active = false;
 				aux->die();
-
 			}
 
 		}
 
+		//we dont allow the enemy to change the direction everytime it collide with another enemy.
 		if (!timerNotChangingDir.isStarted() && status != ENEMY_DYING && status != ENEMY_ROLLING && status != ENEMY_SNOWBALL && status != ENEMY_JUMPING_LEFT && status != ENEMY_JUMPING_RIGHT)
 		{
 			walking = (walking * -1);
@@ -692,23 +660,17 @@ void EnemyYellowMonkey::OnCollision(Collider* c1, Collider* c2)
 
 	case COLLIDER_PLAYER_SOFT_SHOT:
 	{
-
-
 		if (shotCount < 4)
 		{
 			timeAnimationBeingTrapped.stop();
 			shotCount++;
 			timeAnimationBeingTrapped.start();
 		}
-
-
 	}
 	break;
 
 	case COLLIDER_PLAYER_HARD_SHOT:
 	{
-
-
 		if (shotCount < 4)
 		{
 			timeAnimationBeingTrapped.stop();

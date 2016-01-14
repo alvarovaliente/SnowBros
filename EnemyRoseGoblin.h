@@ -17,23 +17,25 @@ class EnemyRoseGoblin : public GameObject
 {
 public:
 
+	//methods
 	EnemyRoseGoblin(infoGameObject info);
 	~EnemyRoseGoblin();
+
 	bool Start();
 	update_status PreUpdate();
 	update_status Update();
-	update_status PostUpdate();
 	void roll(DIRECTION dir);
 	void die();
 	bool CleanUp();
 	bool const isDead();
-
 	void OnCollision(Collider* c1, Collider* c2);
 
+	//graphics
 	SDL_Texture *graphicsEnemyRoseGoblin = nullptr;
 	SDL_Texture *graphicsEnemyShotSnowball = nullptr;
 	SDL_Texture *graphicsEnemyRollingSnowball = nullptr;
 
+	//animation
 	Animation idleRight;
 	Animation idleLeft;
 	Animation walkingLeft;
@@ -41,18 +43,15 @@ public:
 	Animation jumpingLeft;
 	Animation jumpingRight;
 	Animation dying;
-
 	Animation snowTrapped;
-
 	Animation snowShotOne;
 	Animation snowShotTwo;
 	Animation snowShotThree;
 	Animation snowShotFour;
 	Animation snowRolling;
 
-	fPoint offset;
+	//variables
 	fPoint speed;
-	float gravity;
 	ENEMY_STATUS status;
 	ENEMY_STATUS previousStatus;
 	int shotCount;
@@ -60,6 +59,7 @@ public:
 	int flying;
 	int rebound;
 
+	//timers
 	Timer timeAnimationBeingTrapped;
 	Timer timeAnimationDying;
 	Timer timeAnimationJumping;
@@ -68,6 +68,7 @@ public:
 	Timer lifetime;
 	Timer startTime;
 
+	//sounds
 	unsigned int reboundFx;
 	unsigned int dieFx;
 	

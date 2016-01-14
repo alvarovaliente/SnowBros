@@ -10,17 +10,15 @@
 class MParticle : public Module
 {
 public:
+
 	MParticle();
 	~MParticle();
 
 	bool Start();
 	update_status Update();
 	update_status PreUpdate();
-
 	bool CleanUp();
-
 	void createParticle(infoParticle info, PARTICLE_TYPE type, COLLIDER_TYPE collider_type);
-
 	void OnCollision(Collider* c1, Collider* c2);
 
 
